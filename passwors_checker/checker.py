@@ -1,5 +1,7 @@
 import requests
 import hashlib
+import sys
+
 def request_api(code):
     respond = requests.get("https://api.pwnedpasswords.com/range/" +code )
     if respond.status_code!=200:
@@ -19,13 +21,15 @@ def pass_check(password):
     return read_hash(result,tail)
    
 
-import sys
+import os
 def main(args):
-
-    for counts in args[1:]:
+    
+    for counts in args:
         count = pass_check(counts)
         if count:
-            print (f"{counts} code is breakable!!!\nIt was pwned {count} times")
+            print (f"\n{counts} code is breakable!!!\nIt was pwned {count} times\n")
         else:
-            print(f"{counts} is good passwords!!!")
-main(sys.argv)
+            print(f"\n{counts} is good passwords!!!\n")
+    return "done"
+
+main(list(x for x in str(open("passwords.txt" ,mode="r").read()).split() ))
